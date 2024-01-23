@@ -25,3 +25,15 @@ class AdvertisementSerializer(ModelSerializer):
         model = Advertisement
         fields = '__all__'
         read_only_fields = ('status', 'warning_tag', 'user', 'created', 'is_expired')
+        extra_kwargs = {
+            'text': {
+                "required": True, "allow_null": False
+            },
+            'contuct': {
+                 "required": True, "allow_null": False
+            }
+        }
+
+    def create(self, validated_data):
+        validated_data['user']=self.context.get("request").user
+        return super().create(validated_data)
