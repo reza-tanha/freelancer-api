@@ -5,9 +5,10 @@ from django.utils import timezone
 
 def path_file_adv(instance: 'Advertisement' , filename):
     username = instance.user.username if instance.user else "anonymus"
-    adv_type_name = instance.type_adv.name if instance else "other"
+    adv_type_name = instance.type_adv.name.split(" "[0]) if instance else "other"
     time_now = timezone.now().date()
-    return f"adv_type_{adv_type_name}/{time_now}/user_{username}/{filename}"
+    return f"advertisements/adv_type_{adv_type_name}/{time_now}/user_{username}/{filename}"
+
 
 class ADVTypes(models.Model):
 
