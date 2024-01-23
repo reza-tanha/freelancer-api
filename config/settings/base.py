@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'apps.account',
     'apps.api',
+    'apps.advertisement',
 ]
 
 AUTH_USER_MODEL = 'account.User'
