@@ -43,13 +43,13 @@ class Advertisement(models.Model):
     
     type_adv = models.ForeignKey(ADVTypes, related_name="type_advertisements", on_delete=models.CASCADE, null=True, blank=True)
     
-    text = models.TextField(default=None, null=True, blank=True)
+    text = models.TextField(default=None, null=True)
     
     file = models.FileField(upload_to=path_file_adv, default=None, null=True, blank=True)
     
-    contuct = models.CharField(max_length=40, default=None, null=True, blank=True)
+    contuct = models.CharField(max_length=40, default=None, null=True,)
     
-    status = models.CharField(max_length=30, choices=STATUS, default="unknow", null=True, blank=True)
+    status = models.CharField(max_length=30, choices=STATUS, default="wait_for_pay", null=True, blank=True)
     
     created = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     
