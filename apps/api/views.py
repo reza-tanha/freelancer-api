@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-
+from apps.api.utils.pageination import CustomPagination
 
 
 class UserRegister(ModelViewSet):
@@ -24,10 +24,23 @@ class AdvertisementViewSet(ModelViewSet):
     serializer_class = AdvertisementSerializer
     permission_classes = (IsAuthenticated, )
     http_method_names = ('post', "get", "list")
-
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         print("Queryset is called!")
         return Advertisement.objects.filter(
             status="publish"
-        ).select_related("user", "type_adv")
+        ).select_related("user", "type_adv").order_by("-id")
+    
+@method_decorator(cache_page(1 * 60), name='dispatch')
+class UserAdvertisementViewSet(ModelViewSet):
+    serializer_class = AdvertisementSerializer
+    permission_classes = (IsAuthenticated, )
+    http_method_names = ("put","get", "list")
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        print("Queryset is called!")
+        return Advertisement.objects.filter(
+            user=self.request.user
+        ).select_related("user", "type_adv").order_by("-id")

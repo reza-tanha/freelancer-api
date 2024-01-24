@@ -12,6 +12,7 @@ urlpatterns = []
 router = routers.SimpleRouter()
 router.register('auth/register', UserRegister, basename='user-register')
 router.register('advertisement', AdvertisementViewSet, basename='Advertisement')
+router.register('user/advertisement', UserAdvertisementViewSet, basename='user-Advertisement')
 urlpatterns += [
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
