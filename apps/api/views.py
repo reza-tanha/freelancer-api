@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from apps.advertisement.models import Advertisement
+from apps.payment.models import Payment
 from apps.api.serializers import *
 from apps.api.serializer.advertisment import AdvertisementSerializer, UserAdvertisementSerializer
 from django.views.decorators.cache import cache_page
@@ -34,7 +35,7 @@ class AdvertisementViewSet(ModelViewSet):
             status="publish"
         ).select_related("user", "type_adv").order_by("-id")
     
-@method_decorator(cache_page(1 * 60), name='dispatch')
+@method_decorator(cache_page(20), name='dispatch')
 class UserAdvertisementViewSet(ModelViewSet):
     serializer_class = UserAdvertisementSerializer
     permission_classes = (IsAuthenticated, )
@@ -48,3 +49,19 @@ class UserAdvertisementViewSet(ModelViewSet):
         return Advertisement.objects.filter(
             user=self.request.user
         ).select_related("user", "type_adv").order_by("-id")
+    
+@method_decorator(cache_page(20), name='dispatch')
+class UserPaymentViewSet(ModelViewSet):
+    from apps.api.serializer.payment import UserPaymentSerializer
+    serializer_class = UserPaymentSerializer
+    permission_classes = (IsAuthenticated, )
+    http_method_names = ("get", "list")
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ('is_paid', 'getway', 'transaction_id')
+
+    def get_queryset(self):
+        print("Queryset is called!")
+        return Payment.objects.filter(
+            user=self.request.user
+        ).select_related("user", "advertisement").order_by("-id")
