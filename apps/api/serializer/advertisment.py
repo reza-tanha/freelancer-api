@@ -37,6 +37,27 @@ class AdvertisementSerializer(ModelSerializer):
     def create(self, validated_data):
         validated_data['user']=self.context.get("request").user
         return super().create(validated_data)
+   
+
+class UserAdvertisementSerializer(ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'request' in self.context and self.context['request'].method == 'GET':
+            self.fields['user'] = ADVUserSerializer()
+            self.fields['type_adv'] = ADVTypeAdvSerializer()
+            
+    class Meta:
+        model = Advertisement
+        fields = '__all__'
+        read_only_fields = ('status', 'warning_tag', 'user', 'created')
+        extra_kwargs = {
+            'text': {
+                "required": True, "allow_null": False
+            },
+            'contuct': {
+                 "required": True, "allow_null": False
+            }
+        }
     
     def update(self, instance, validated_data):
         if instance.status == 'publish':

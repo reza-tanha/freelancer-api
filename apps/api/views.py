@@ -2,13 +2,13 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from apps.advertisement.models import Advertisement
 from apps.api.serializers import *
-from apps.api.serializer.advertisment import AdvertisementSerializer
+from apps.api.serializer.advertisment import AdvertisementSerializer, UserAdvertisementSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-from django.views.decorators.vary import vary_on_cookie, vary_on_headers
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from apps.api.utils.pageination import CustomPagination
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 
 class UserRegister(ModelViewSet):
@@ -25,6 +25,8 @@ class AdvertisementViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, )
     http_method_names = ('post', "get", "list")
     pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ('type_adv', 'contuct', 'warning_tag', 'is_expired')
 
     def get_queryset(self):
         print("Queryset is called!")
@@ -34,10 +36,12 @@ class AdvertisementViewSet(ModelViewSet):
     
 @method_decorator(cache_page(1 * 60), name='dispatch')
 class UserAdvertisementViewSet(ModelViewSet):
-    serializer_class = AdvertisementSerializer
+    serializer_class = UserAdvertisementSerializer
     permission_classes = (IsAuthenticated, )
     http_method_names = ("put","get", "list")
     pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ('type_adv', 'contuct', 'status', 'warning_tag', 'is_expired')
 
     def get_queryset(self):
         print("Queryset is called!")
