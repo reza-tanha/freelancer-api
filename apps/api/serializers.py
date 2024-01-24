@@ -1,8 +1,6 @@
 from rest_framework.serializers import ModelSerializer, CharField
 from apps.api.utils.validator import UserRegisterValidator
 from django.contrib.auth import get_user_model
-from apps.advertisement.models import Advertisement
-
 
 
 class UserRegisterSerializer(ModelSerializer, UserRegisterValidator):
