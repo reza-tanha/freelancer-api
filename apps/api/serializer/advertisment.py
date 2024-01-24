@@ -50,16 +50,10 @@ class UserAdvertisementSerializer(ModelSerializer):
         model = Advertisement
         fields = '__all__'
         read_only_fields = ('status', 'warning_tag', 'user', 'created')
-        extra_kwargs = {
-            'text': {
-                "required": True, "allow_null": False
-            },
-            'contuct': {
-                 "required": True, "allow_null": False
-            }
-        }
-    
+
     def update(self, instance, validated_data):
+        if len(validated_data) == 1 and validated_data.get('is_expired') is not None:
+            return super().update(instance, validated_data)
         if instance.status == 'publish':
             raise ValidationError("this advertisement is published ! you can't changed")
         return super().update(instance, validated_data)
