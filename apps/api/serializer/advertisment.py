@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 from apps.advertisement.models import Advertisement
 from django.contrib.auth import get_user_model
 from apps.advertisement.models import Advertisement, ADVTypes
@@ -37,3 +37,8 @@ class AdvertisementSerializer(ModelSerializer):
     def create(self, validated_data):
         validated_data['user']=self.context.get("request").user
         return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        if instance.status == 'publish':
+            raise ValidationError("this advertisement is published ! you can't changed")
+        return super().update(instance, validated_data)
