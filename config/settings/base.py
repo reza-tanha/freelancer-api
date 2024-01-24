@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.api',
     'apps.advertisement',
+    'apps.payment',
 ]
 
 AUTH_USER_MODEL = 'account.User'
@@ -39,8 +40,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
 
 ]
 
@@ -120,10 +121,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
 }
 
 # JWT *
@@ -144,11 +148,18 @@ AWS_DEFAULT_ACL = config("AWS_DEFAULT_ACL")
 AWS_SERVICE_NAME = config("AWS_SERVICE_NAME")
 
 
-# CACHES
+# # CACHES
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+        'TIMEOUT': None, 
+        
     }
 }
 CACHE_MIDDLEWARE_ALIAS = 'default'
+
+# PAYMENT
+ZARINPAL_MERCHANT = config("ZARINPAL_MERCHANT")
+ZARINPAL_REDIRECT_PATH_AFTER_PAYMENT = config("ZARINPAL_REDIRECT_PATH_AFTER_PAYMENT")
+BASE_SITE_URL = config("BASE_SITE_URL")
