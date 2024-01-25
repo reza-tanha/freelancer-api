@@ -5,12 +5,12 @@ from django.utils import timezone
 
 def path_file_adv(instance: 'Advertisement' , filename):
     username = instance.user.username if instance.user else "anonymus"
-    adv_type_name = instance.type_adv.name.split(" "[0]) if instance else "other"
+    category_name = instance.type_adv.name.split(" "[0]) if instance else "other"
     time_now = timezone.now().date()
-    return f"advertisements/adv_type_{adv_type_name}/{time_now}/user_{username}/{filename}"
+    return f"advertisements/category_{category_name}/{time_now}/user_{username}/{filename}"
 
 
-class ADVTypes(models.Model):
+class Category(models.Model):
 
     name = models.CharField(max_length=40, null=True, blank=True)
     
@@ -41,7 +41,7 @@ class Advertisement(models.Model):
     )
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_advertisements", null=True, blank=True)
     
-    type_adv = models.ForeignKey(ADVTypes, related_name="type_advertisements", on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(Category, related_name="category_advertisements", on_delete=models.CASCADE, null=True, blank=True)
     
     text = models.TextField(default=None, null=True)
     
@@ -58,6 +58,6 @@ class Advertisement(models.Model):
     is_expired = models.BooleanField(default=False, null=True, blank=True)
     
     def __str__(self) -> str:
-        return f"{self.user.username if self.user else self.type_adv.name if self.type_adv else 'other' }"
+        return f"{self.user.username if self.user else self.category.name if self.category else 'other' }"
     
     

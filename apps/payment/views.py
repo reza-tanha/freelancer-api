@@ -47,7 +47,7 @@ class ZarinpalCreateTransaction(APIView, ZarinpalMetaData):
         zarinpal_send_data = {
             "merchant_id": self.zarinpal_merchant,
             "description": "description",
-            "amount": self.adv.type_adv.price,
+            "amount": self.adv.category.price,
             "callback_url": self.zarinpal_callback.format(),
             "metadata": {"mobile": self.adv.user.phone, "email": self.adv.user.email},
         }
@@ -56,7 +56,7 @@ class ZarinpalCreateTransaction(APIView, ZarinpalMetaData):
     def create_payment(self):
         return Payment.objects.create(
             user=self.adv.user,
-            amount=self.adv.type_adv.price,
+            amount=self.adv.category.price,
             advertisement=self.adv
         )
 

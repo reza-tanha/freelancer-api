@@ -2,8 +2,8 @@ from django.contrib import admin
 from apps.advertisement.models import *
 
 
-@admin.register(ADVTypes)
-class ADVTypesAdmin(admin.ModelAdmin):    
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):    
     list_display = ("id", "name", "coin", "price")
     list_editable = ("coin",)
     

@@ -27,13 +27,13 @@ class AdvertisementViewSet(ModelViewSet):
     http_method_names = ('post', "get", "list")
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('type_adv', 'contuct', 'warning_tag', 'is_expired')
+    filterset_fields = ('category', 'contuct', 'warning_tag', 'is_expired')
 
     def get_queryset(self):
         print("Queryset is called!")
         return Advertisement.objects.filter(
             status="publish"
-        ).select_related("user", "type_adv").order_by("-id")
+        ).select_related("user", "category").order_by("-id")
     
 @method_decorator(cache_page(20), name='dispatch')
 class UserAdvertisementViewSet(ModelViewSet):
@@ -42,13 +42,13 @@ class UserAdvertisementViewSet(ModelViewSet):
     http_method_names = ("put","get", "list")
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('type_adv', 'contuct', 'status', 'warning_tag', 'is_expired')
+    filterset_fields = ('category', 'contuct', 'status', 'warning_tag', 'is_expired')
 
     def get_queryset(self):
         print("Queryset is called!")
         return Advertisement.objects.filter(
             user=self.request.user
-        ).select_related("user", "type_adv").order_by("-id")
+        ).select_related("user", "category").order_by("-id")
     
 @method_decorator(cache_page(20), name='dispatch')
 class UserPaymentViewSet(ModelViewSet):

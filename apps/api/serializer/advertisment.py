@@ -1,12 +1,12 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from apps.advertisement.models import Advertisement
 from django.contrib.auth import get_user_model
-from apps.advertisement.models import Advertisement, ADVTypes
+from apps.advertisement.models import Advertisement, Category
 
 
 class ADVTypeAdvSerializer(ModelSerializer):
     class Meta:
-        model = ADVTypes
+        model = Category
         fields = ['id', 'name', 'price','coin', 'description', 'slug']
 
 class ADVUserSerializer(ModelSerializer):
@@ -19,7 +19,7 @@ class AdvertisementSerializer(ModelSerializer):
         super().__init__(*args, **kwargs)
         if 'request' in self.context and self.context['request'].method == 'GET':
             self.fields['user'] = ADVUserSerializer()
-            self.fields['type_adv'] = ADVTypeAdvSerializer()
+            self.fields['category'] = ADVTypeAdvSerializer()
             
     class Meta:
         model = Advertisement
@@ -44,7 +44,7 @@ class UserAdvertisementSerializer(ModelSerializer):
         super().__init__(*args, **kwargs)
         if 'request' in self.context and self.context['request'].method == 'GET':
             self.fields['user'] = ADVUserSerializer()
-            self.fields['type_adv'] = ADVTypeAdvSerializer()
+            self.fields['category'] = ADVTypeAdvSerializer()
             
     class Meta:
         model = Advertisement
