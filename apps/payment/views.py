@@ -36,14 +36,13 @@ class ZarinpalCreateTransaction(APIView, ZarinpalMetaData):
             if not response["errors"]:
                 return redirect(self.zarinpal_api_startpay.format(authority=authority))
             else:
-                return Response("payment error", status=400)
+                return Response(f"payment error: {response['errors']['message']}", status=400)
         except:
-            return Response("payment error", status=400)
+            return Response(f"payment error: {response['errors']['message']}", status=400)
 
 
     def serialize_send_data(self) -> dict:
         """Serialize the data to create the new zarinpal transaction."""
-        
         zarinpal_send_data = {
             "merchant_id": self.zarinpal_merchant,
             "description": "description",
