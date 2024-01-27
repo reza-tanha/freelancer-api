@@ -1,0 +1,41 @@
+version: "3.9"
+
+services: 
+  web: 
+    container_name: freelancer_web
+    hostname: freelancer_web
+    build: . 
+    command: /bin/sh -c "./web_entrypoint.sh"
+    ports: 
+      - '8000:8000'
+    volumes:
+      - .:/app
+    restart: "always"
+    depends_on:
+      - db
+    env_file:
+      - .env
+  db: 
+    container_name: postgres
+    image: postgres:13-alpine
+    env_file:
+      - .env
+    volumes:
+        - pgdata:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+  
+volumes:
+  pgdata:
+  redis-data:
+
+
+      
