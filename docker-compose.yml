@@ -5,7 +5,7 @@ services:
     container_name: freelancer_web
     hostname: freelancer_web
     build: . 
-    command: web_entrypoint.sh
+    command: /bin/sh -c "./web_entrypoint.sh"
     ports: 
       - '8000:8000'
     volumes:
@@ -16,7 +16,7 @@ services:
     env_file:
       - .env
   db: 
-    container_name: omron_db
+    container_name: postgres
     image: postgres:13-alpine
     env_file:
       - .env

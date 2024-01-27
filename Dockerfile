@@ -4,13 +4,8 @@ WORKDIR /app
 
 COPY . /app
 
-
 RUN pip install --upgrade pip
 
-RUN pip install --no-cache-dir -r requirements.txt
-
-RUN apt update && apt install nodejs npm -y
-
-# RUN npm install elasticdump -g
+RUN pip install -r requirements.txt
 
 # ENTRYPOINT [ "python", "run.py"]
